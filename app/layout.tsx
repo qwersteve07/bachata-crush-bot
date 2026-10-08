@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bachata Crush 問答",
+  title: "Ask Bachata Crush Anything",
   description: "Ask questions about the Bachata Crush festival in Taipei.",
 };
 

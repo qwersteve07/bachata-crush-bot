@@ -1,14 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { loadSiteContent } from "@/lib/site";
+import { FLOW_EVENT_URL, loadFlowEventContent, loadSiteContent } from "@/lib/site";
 
 export const maxDuration = 60;
 
 const client = new Anthropic();
 
 const INSTRUCTIONS = `You are the Q&A assistant for Bachata Crush, a bachata dance festival held at Flow Taipei in Taiwan.
-Answer visitors' questions using ONLY the website content provided in <website> below.
+Answer visitors' questions using ONLY the reference content provided below:
+- <website>: the official festival site, bachatacrush.com.
+- <ticket_page>: the festival's ticket page on flowtaipei.com (dates, venue, pass prices and early-bird deadlines, how to buy, refund/transfer policy). Link to it for anything about buying tickets.
 
-- If the answer isn't in the website content, say you don't know and suggest checking https://bachatacrush.com or the Bachata Crush Instagram. Never invent dates, prices, names, or policies.
+- If the answer isn't in the reference content, say you don't know and suggest checking https://bachatacrush.com or the Bachata Crush Instagram. Never invent dates, prices, names, or policies.
 - Reply in the same language the visitor writes in (e.g. Traditional Chinese for 中文 questions, English for English).
 - Keep answers short and friendly. Use markdown links to the relevant page on the site when it helps.`;
 
@@ -33,13 +35,18 @@ export async function POST(req: Request) {
   const messages = parseMessages(await req.json().catch(() => null));
   if (!messages) return new Response("Invalid request", { status: 400 });
 
-  let site: string;
-  try {
-    site = await loadSiteContent();
-  } catch (err) {
-    console.error(err);
+  const [site, flow] = await Promise.allSettled([loadSiteContent(), loadFlowEventContent()]);
+  if (site.status === "rejected") {
+    console.error(site.reason);
     return new Response("無法讀取 bachatacrush.com，請稍後再試。", { status: 502 });
   }
+  // The ticket page is a bonus; answer from the main site alone if it's down.
+  if (flow.status === "rejected") console.error(flow.reason);
+  const reference =
+    `<website url="https://bachatacrush.com">\n${site.value}\n</website>` +
+    (flow.status === "fulfilled"
+      ? `\n\n<ticket_page url="${FLOW_EVENT_URL}">\n${flow.value}\n</ticket_page>`
+      : "");
 
   const stream = client.beta.messages.stream({
     model: "claude-opus-5-5",
@@ -51,7 +58,7 @@ export async function POST(req: Request) {
       { type: "text", text: INSTRUCTIONS },
       {
         type: "text",
-        text: `<website url="https://bachatacrush.com">\n${site}\n</website>`,
+        text: reference,
         cache_control: { type: "ephemeral" },
       },
     ],

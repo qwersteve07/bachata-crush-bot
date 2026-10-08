@@ -50,6 +50,13 @@ header { padding: 32px 0 16px; }
 h1 { margin: 0; font-size: 1.6rem; }
 .sub { margin: 4px 0 0; color: var(--muted); font-size: 0.95rem; }
 
+/* Equal auto margins above the header and the footer keep the start screen centered. */
+.wrap.empty header { margin-top: auto; }
+.wrap.empty footer { margin-top: auto; }
+.wrap.empty header { text-align: center; }
+.start { display: flex; flex-direction: column; gap: 16px; }
+.start .suggestions { justify-content: center; }
+
 .chat { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 8px 0 16px; }
 
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -77,14 +84,11 @@ h1 { margin: 0; font-size: 1.6rem; }
 .msg.assistant { align-self: flex-start; background: var(--bot-bg); border: 1px solid var(--border); }
 .typing { color: var(--muted); }
 
-form {
-  position: sticky;
-  bottom: 0;
+form.ask {
   display: flex;
   gap: 8px;
-  padding: 12px 0 20px;
-  background: var(--bg);
 }
+.chat form.ask { margin: 8px 0 24px; }
 input {
   flex: 1;
   min-width: 0;
@@ -107,3 +111,12 @@ form button {
   cursor: pointer;
 }
 form button:disabled { opacity: 0.5; cursor: default; }
+
+footer {
+  padding: 16px 0 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+footer a { white-space: nowrap; }

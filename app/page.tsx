@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { FLOW_EVENT_URL } from "@/lib/site";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -53,7 +54,7 @@ export default function Home() {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
   async function ask(question: string) {
     const q = question.trim();
@@ -87,18 +88,42 @@ export default function Home() {
     }
   }
 
+  const empty = messages.length === 0;
+
+  const form = (
+    <form
+      className="ask"
+      onSubmit={(e) => {
+        e.preventDefault();
+        ask(input);
+      }}
+    >
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder={empty ? "輸入你的問題…" : "繼續問…"}
+        maxLength={2000}
+        autoFocus
+      />
+      <button type="submit" disabled={loading || !input.trim()}>
+        送出
+      </button>
+    </form>
+  );
+
   return (
-    <main className="wrap">
+    <main className={`wrap${empty ? " empty" : ""}`}>
       <header>
-        <h1>Bachata Crush 問答</h1>
+        <h1>Ask Bachata Crush Anything</h1>
         <p className="sub">
-          關於 <a href="https://bachatacrush.com" target="_blank" rel="noopener noreferrer">bachatacrush.com</a>{" "}
-          的任何問題都可以問我 · Ask me anything about the festival
+          關於 <a href="https://bachatacrush.com" target="_blank" rel="noopener noreferrer">Bachata Crush</a>{" "}
+          的任何問題都可以問我 · Ask me anything about Bachata Crush
         </p>
       </header>
 
-      <section className="chat">
-        {messages.length === 0 && (
+      {empty ? (
+        <section className="start">
+          {form}
           <div className="suggestions">
             {SUGGESTIONS.map((s) => (
               <button key={s} onClick={() => ask(s)}>
@@ -106,32 +131,25 @@ export default function Home() {
               </button>
             ))}
           </div>
-        )}
-        {messages.map((m, i) => (
-          <div key={i} className={`msg ${m.role}`}>
-            {m.content ? <Markdown text={m.content} /> : <span className="typing">思考中…</span>}
-          </div>
-        ))}
-        <div ref={endRef} />
-      </section>
+        </section>
+      ) : (
+        <section className="chat">
+          {messages.map((m, i) => (
+            <div key={i} className={`msg ${m.role}`}>
+              {m.content ? <Markdown text={m.content} /> : <span className="typing">思考中…</span>}
+            </div>
+          ))}
+          {!loading && form}
+          <div ref={endRef} />
+        </section>
+      )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          ask(input);
-        }}
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="輸入你的問題…"
-          maxLength={2000}
-          autoFocus
-        />
-        <button type="submit" disabled={loading || !input.trim()}>
-          送出
-        </button>
-      </form>
+      <footer>
+        參考來源 Sources：
+        <a href="https://bachatacrush.com" target="_blank" rel="noopener noreferrer">bachatacrush.com</a>
+        {" · "}
+        <a href={FLOW_EVENT_URL} target="_blank" rel="noopener noreferrer">Flow Taipei 活動與票券頁</a>
+      </footer>
     </main>
   );
 }
