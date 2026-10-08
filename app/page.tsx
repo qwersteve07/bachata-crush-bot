@@ -9,7 +9,7 @@ const SUGGESTIONS = [
   "2026 年的活動時間表是什麼？",
   "要去哪裡買票？",
   "Jack & Jill 比賽怎麼報名？",
-  "場地附近有推薦的住宿嗎？",
+  "有哪些課程？",
 ];
 
 // Minimal markdown: [links](url), bare URLs, **bold**, and line breaks.
@@ -149,6 +149,8 @@ export default function Home() {
         <a href="https://bachatacrush.com" target="_blank" rel="noopener noreferrer">bachatacrush.com</a>
         {" · "}
         <a href={FLOW_EVENT_URL} target="_blank" rel="noopener noreferrer">Flow Taipei 活動與票券頁</a>
+        {" · "}
+        <a href="https://www.instagram.com/bachata_crush_tw/" target="_blank" rel="noopener noreferrer">Instagram @bachata_crush_tw</a>
       </footer>
     </main>
   );

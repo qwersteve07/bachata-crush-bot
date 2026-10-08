@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { FLOW_EVENT_URL, loadFlowEventContent, loadSiteContent } from "@/lib/site";
+import { INSTAGRAM_URL, loadInstagramContent } from "@/lib/instagram";
 
 export const maxDuration = 60;
 
@@ -9,6 +10,7 @@ const INSTRUCTIONS = `You are the Q&A assistant for Bachata Crush, a bachata dan
 Answer visitors' questions using ONLY the reference content provided below:
 - <website>: the official festival site, bachatacrush.com.
 - <ticket_page>: the festival's ticket page on flowtaipei.com (dates, venue, pass prices and early-bird deadlines, how to buy, refund/transfer policy). Link to it for anything about buying tickets.
+- <instagram>: recent posts from the festival's Instagram; posts marked （釘選） are pinned. Each post is headed by its date. When it conflicts with older info elsewhere, prefer the newer post and mention its date.
 
 - If the answer isn't in the reference content, say you don't know and suggest checking https://bachatacrush.com or the Bachata Crush Instagram. Never invent dates, prices, names, or policies.
 - Reply in the same language the visitor writes in (e.g. Traditional Chinese for 中文 questions, English for English).
@@ -35,17 +37,25 @@ export async function POST(req: Request) {
   const messages = parseMessages(await req.json().catch(() => null));
   if (!messages) return new Response("Invalid request", { status: 400 });
 
-  const [site, flow] = await Promise.allSettled([loadSiteContent(), loadFlowEventContent()]);
+  const [site, flow, ig] = await Promise.allSettled([
+    loadSiteContent(),
+    loadFlowEventContent(),
+    loadInstagramContent(),
+  ]);
   if (site.status === "rejected") {
     console.error(site.reason);
     return new Response("無法讀取 bachatacrush.com，請稍後再試。", { status: 502 });
   }
   // The ticket page is a bonus; answer from the main site alone if it's down.
   if (flow.status === "rejected") console.error(flow.reason);
+  if (ig.status === "rejected") console.error(ig.reason);
   const reference =
     `<website url="https://bachatacrush.com">\n${site.value}\n</website>` +
     (flow.status === "fulfilled"
       ? `\n\n<ticket_page url="${FLOW_EVENT_URL}">\n${flow.value}\n</ticket_page>`
+      : "") +
+    (ig.status === "fulfilled" && ig.value
+      ? `\n\n<instagram url="${INSTAGRAM_URL}">\n${ig.value}\n</instagram>`
       : "");
 
   const stream = client.beta.messages.stream({
