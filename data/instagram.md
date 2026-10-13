@@ -6,9 +6,33 @@ Bachata Crush Instagram 貼文（@bachata_crush_tw）
 貼文連結可省略，但有的話機器人可以引導使用者去看原文。
 圖片裡的重要文字（例如時間表、價格海報）請一併打成文字。
 
-最後整理：2026-10-08，涵蓋 2026-09-20 之後的貼文與所有釘選貼文。
+最後整理：2026-10-13，涵蓋 2026-09-20 之後的貼文與所有釘選貼文。
 重複的宣傳文（9/20、9/29、9/30 的講師名單）已合併到 10/7 最新版本，只列出差異。
 -->
+
+## 2026-10-12 The Crush Bar 調酒吧
+連結：https://www.instagram.com/bachata_crush_tw/p/DebCiBQhRBL/
+
+活動週末會場內設有調酒吧「The Crush Bar」，由 @stellalai0409 規劃。從經典調酒到專屬特調都有。
+
+- 優惠：購買 NT 2,000 飲料券（Drink Vouchers），加贈免費 shots。
+- 酒單（海報列出 8 款）：
+  - Gin Tonic：琴酒、通寧水。清爽、俐落、帶柑橘味。
+  - Vodka Cranberry：伏特加、蔓越莓。果香、清爽、微酸。
+  - Highball：威士忌、蘇打。輕盈、有氣泡、清爽。
+  - Close Embrace：威士忌、柳橙、萊姆。順口、柑橘、微甜。
+  - Crush Me Softly：伯爵茶、伏特加、蘋果。優雅、花香、細緻清爽。
+  - Crush on You：伏特加、荔枝、萊姆。甜、花香、浪漫。
+  - Dominican Dream：蘭姆酒、熱帶水果。熱帶果香。
+  - Bachata Crush：龍舌蘭、柳橙、萊姆。活潑、熱情、偏甜。
+
+## 2026-10-12 倒數 4 天：Dress Code 提醒（@flow.taipei 發布）
+連結：https://www.instagram.com/flow.taipei/p/DeY6ghHv12z/
+
+倒數 4 天的提醒海報，再次列出三天的 Dress Code（和 9/23 的貼文一致）：
+- 10/16（五）NEON：發光霓虹彩色。
+- 10/17（六）DRESSY & SULTRY：正裝與洋裝，華麗、性感、充滿魅力；禁止穿牛仔褲。
+- 10/18（日）PJ：睡衣派對（海報上寫：不是你平常穿的那件睡衣）。
 
 ## 2026-10-07 最新講師與 DJ 名單
 連結：https://www.instagram.com/bachata_crush_tw/p/DeM1uHUI1aL/
